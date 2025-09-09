@@ -58,6 +58,22 @@ function getEditorValue() {
   });
   return code.trim();
 }
+/*If LeetCode changes their HTML structure, this might break. So the below code will helps u out if above code breaks..... 
+
+
+function getEditorValue() {
+  try {
+    const editor = monaco?.editor?.getModels?.()[0];
+    if (editor) return editor.getValue();
+  } catch (e) {
+    console.warn("Fallback to DOM scraping:", e);
+  }
+  const lines = document.querySelectorAll('.view-lines > div');
+  return Array.from(lines).map(l => l.innerText).join('\n').trim();
+}
+
+
+*/
 
 function getLeetCodePrompt() {
   try {
@@ -131,7 +147,7 @@ function showInEditor(text) {
 async function handleAutocomplete() {
   const problemText = getLeetCodePrompt();
   const code = getEditorValue();
-  const prompt = `LeetCode Problem:\n${problemText}\n\nUser's Code:\n${code}\n\nPlease autocomplete the next lines of code. Return only code with correct syntax.`;
+  const prompt = `LeetCode Problem:\n${problemText}\n\nUser's Code:\n${code}\n\nPlease provide a brute force solution for this problem.Return only code with correct syntax.`;
   const suggestion = await fetchGemini(prompt);
   showInEditor("✨ Autocomplete Suggestion:\n\n" + suggestion);
 }
